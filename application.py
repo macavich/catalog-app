@@ -422,8 +422,14 @@ def showSportsJSON():
 @app.route('/sports/<categoryname>/JSON/')
 def showSingleSportJSON(categoryname):
     session = DBSession()
-    sport = session.query(Sport).filter_by(name=categoryname).one()
-    items = session.query(SportItem).filter_by(sport_id=sport_id).all()
+    try:
+        sport = session.query(Sport).filter_by(name=categoryname).one()
+    except NoResultFound:
+        return jsonify({'error': 'Failed to find category'}), 404
+    try:
+        items = session.query(SportItem).filter_by(sport_id=sport.id).all()
+    except NoResultFound:
+        return jsonify({'error': 'No items for specific category'}), 404
     return jsonify(
         category=sport.serialize, items=[i.serialize for i in items])
 
@@ -432,7 +438,16 @@ def showSingleSportJSON(categoryname):
 @app.route('/sports/<categoryname>/items/<itemname>/JSON/')
 def showSportItemJSON(categoryname, itemname):
     session = DBSession()
-    item = session.query(SportItem).filter_by(name=itemname).one()
+    try:
+        sport = session.query(Sport).filter_by(name=categoryname).one()
+    except NoResultFound:
+        return jsonify({'error': 'Failed to find category'}), 404
+    try:
+        item = session.query(SportItem).filter_by(name=itemname,
+                                                  sport_id=sport.id).one()
+    except NoResultFound:
+        return jsonify(
+            {'error': 'Failed to find item with specified category'}), 404
     return jsonify(item.serialize)
 
 

@@ -12,16 +12,6 @@ class User(Base):
     picture = Column(String(250))
     id = Column(Integer, primary_key = True)
 
-    @property
-    def serialize(self):
-       """Return object data in easily serializeable format"""
-       return {
-           'name'         : self.name,
-           'email'        : self.email,
-           'picture'      : self.picture,
-           'id'           : self.id
-       }
-
 class Sport(Base):
     __tablename__ = 'sport'
 
@@ -35,8 +25,7 @@ class Sport(Base):
        """Return object data in easily serializeable format"""
        return {
            'name'         : self.name,
-           'id'           : self.id,
-           'user_id'      : self.user_id
+           'id'           : self.id
        }
 
 class SportItem(Base):
@@ -57,8 +46,7 @@ class SportItem(Base):
            'name'         : self.name,
            'description'  : self.description,
            'id'           : self.id,
-           'sport_id'     : self.sport_id,
-           'user_id'      : self.user_id
+           'sport_id'     : self.sport_id
        }
 
 engine = create_engine('sqlite:///sportscatalog.db')
