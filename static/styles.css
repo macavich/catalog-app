@@ -48,15 +48,20 @@ main {
   background-color: lightblue;
   margin-right: 5%;
   margin-left: 5%;
+  margin-top: 5%;
   padding-left: 5%;
   padding-right: 5%;
+  padding-bottom: 5%;
   display: flex;
   flex-wrap: wrap;
+  box-shadow: 5px 10px #303030;
 }
 
 .flash {
   width: 100%;
-  padding-bottom: 5%;
+  padding-bottom: 2.5%;
+  display: block;
+  margin-right: auto;
 }
 
 .categories {
@@ -68,31 +73,38 @@ main {
   padding-left: 5%;
 }
 
-
 .categories, .items {
-  width: 50%;
+  max-width: 50%;
   min-width: 40%;
 }
 
 /*
 *
-displaying sport items
+displaying sport items with CRUD
 *
 */
 
+.item__container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .item__title {
   color: darkblue;
+  width: 100%;
+}
+
+.item__text {
+  width: 80%;
+}
+
+.sport__text {
+  width: 100%;
 }
 
 .sport__item__link {
   font-size: 1.2em;
 }
-
-/*
-*
-Edit and Create content
-*
-*/
 
 .descriptionbox {
   width: 300px;
