@@ -7,10 +7,10 @@
     <p class="item__text"> Description: {{ item.description }} </p>
     <p class="sport__text"> Sport: {{ sport.name }} </p>
     <br>
-    <a class="edit__delete__link" href="{{ url_for('editSportItem', sport_id = sport.id, item_id = item.id) }}">
+    <a class="edit__delete__link" href="{{ url_for('editSportItem', categoryname = sport.name, itemname = item.name) }}">
       Edit
     </a> |
-    <a class="edit__delete__link" href="{{ url_for('deleteSportItem', sport_id = sport.id, item_id = item.id) }}">
+    <a class="edit__delete__link" href="{{ url_for('deleteSportItem', categoryname = sport.name, itemname = item.name) }}">
       Delete
     </a>
   </div>

@@ -12,6 +12,16 @@ class User(Base):
     picture = Column(String(250))
     id = Column(Integer, primary_key = True)
 
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'name'         : self.name,
+           'email'        : self.email,
+           'picture'      : self.picture,
+           'id'           : self.id
+       }
+
 class Sport(Base):
     __tablename__ = 'sport'
 

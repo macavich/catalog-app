@@ -4,8 +4,8 @@
 
 <main>
   <h3 class="item__title"> Would you like to Edit the Item: {{ item.name }} </h3>
-  <form action="{{ url_for('editSportItem', sport_id = sport.id,
-      item_id = item.id) }}"
+  <form action="{{ url_for('editSportItem', categoryname = sport.name,
+      itemname = item.name) }}"
         method='post'>
     <p>Name:</p>
     <input type="text" size="30" name="name" value="{{ item.name }}">

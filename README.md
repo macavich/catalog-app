@@ -63,7 +63,7 @@ $ python application.py
 
 You'll see a response in your terminal saying "* Running on http://0.0.0:8000/ (Press CTRL+C to quit)".  At this point you'll know your server is running, and can be accessed from a browser after hitting enter in the search bar filled with http://localhost:8000/.
 
-*** Please note that this project uses client_secrets from both facebook and google.  You'll have to make a new project on their developer websites found ([here](https://developers.facebook.com/) and [here](https://developers.google.com/oauthplayground/)) and populate the following files `client_secrets.json` and `fb_client_secrets.json` and place them in the Sports-Project directory for successful execution.  The 'client_secrets' file from each of the OAuth2 providers is the Credential JSON download that will be available for you after making a new project.
+*** Please note that this project uses client_secrets from both facebook and google.  You'll have to make a new project on their developer websites found ([here](https://developers.facebook.com/) and [here](https://developers.google.com/oauthplayground/)) and populate the following files `client_secrets.json` and `fb_client_secrets.json` and place them in the Sports-Project directory for successful execution.  The 'client_secrets' file from each of the OAuth2 providers is the Credentials JSON download that will be available for you after making a new project.
 
 ### Python Library Dependencies
 
@@ -90,22 +90,21 @@ $ pip install flask==1.0.2 --user
 ```
 
 # JSON API Endpoints:
-To view all of the categories and their associated IDs (which will be helpful for further endpoints), send a GET request to:
+To view all of the categories and their associated fields, send a GET request to:
 ```
 localhost:8000/sports/JSON/
 ```
 
-To view all of the items for a category of id '#', send a GET request to:
+To view all of the items for a category of name 'categoryname', send a GET request to:
 ```
-localhost:8000/sports/#/JSON/
-```
-
-To view all a single item of id '##' for a category of id '#', send a GET request to:
-```
-localhost:8000/sports/#/items/##/JSON/
+localhost:8000/sports/categoryname/JSON/
 ```
 
-As one can see, navigation of the API is contingent on a client's ability to identify the 'id' property of categories and items.  Happy requesting!
+To view all a single item of name 'itemname' for a category of name 'categoryname', send a GET request to:
+```
+localhost:8000/sports/categoryname/items/itemname/JSON/
+```
+
 
 # Contributing
 I am not looking for contributors as of the time of me writing this.

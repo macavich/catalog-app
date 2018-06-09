@@ -250,6 +250,10 @@ def showSports():
     sports = session.query(Sport).order_by(asc(Sport.name)).all()
     dSports = {}
     items = session.query(SportItem).order_by(desc(SportItem.id)).all()
+    item2 = session.query(SportItem).filter_by(name='Rink').one()
+    print(item2.serialize)
+    # user = session.query(User).filter_by(id=item2.user_id).one()
+    # print(user.serialize)
     # handle only showing 10 items on the main page
     itemsToShow = []
     for index, item in enumerate(items):
@@ -265,31 +269,32 @@ def showSports():
 
 
 # Show all items in a sport
-@app.route('/sport/<int:sport_id>/')
-@app.route('/sport/<int:sport_id>/items/')
-def showSportsItems(sport_id):
+@app.route('/sport/<categoryname>/')
+@app.route('/sport/<categoryname>/items/')
+def showSportsItems(categoryname):
     logged_in = False
     if 'username' in login_session:
         logged_in = True
     session = DBSession()
-    sport = session.query(Sport).filter_by(id=sport_id).one()
-    items = session.query(SportItem).filter_by(sport_id=sport_id).all()
+    sport = session.query(Sport).filter_by(name=categoryname).one()
+    items = session.query(SportItem).filter_by(sport_id=sport.id).all()
     return render_template(
         'sportsItems.html', items=items, sport=sport, logged_in=logged_in)
 
 
 # Show a single sport item
-@app.route('/sports/<int:sport_id>/items/<int:item_id>/')
-def showSportItem(sport_id, item_id):
+@app.route('/sports/<categoryname>/items/<itemname>/')
+def showSportItem(categoryname, itemname):
     logged_in = False
     if 'username' in login_session:
         logged_in = True
     session = DBSession()
     try:
-        item = session.query(SportItem).filter_by(id=item_id).one()
-        sport = session.query(Sport).filter_by(id=sport_id).one()
+        sport = session.query(Sport).filter_by(name=categoryname).one()
+        item = session.query(SportItem).filter_by(name=itemname,
+                                                  sport_id=sport.id).one()
     except NoResultFound:
-        return jsonify({'error': 'incorrect sport or item id'}), 404
+        return jsonify({'error': 'incorrect category name or item name'}), 404
     if logged_in:
         return render_template('privateShowSportItem.html',
                                item=item, sport=sport, logged_in=logged_in)
@@ -335,23 +340,24 @@ def newSportItem():
 
 
 # #Edit a sport item
-@app.route('/sports/<int:sport_id>/items/<int:item_id>/edit/',
+@app.route('/sports/<categoryname>/items/<itemname>/edit/',
            methods=['GET', 'POST'])
-def editSportItem(sport_id, item_id):
+def editSportItem(categoryname, itemname):
     if 'username' not in login_session:
         flash("You must be logged in to edit items!")
         return redirect(url_for('showSports'))
     logged_in = True
     session = DBSession()
     try:
-        itemToEdit = session.query(SportItem).filter_by(id=item_id).one()
-    except NoResultFound:
-        flash("You were looking for an item that doesn't exist!")
-        return redirect(url_for('showSports'))
-    try:
-        sport = session.query(Sport).filter_by(id=sport_id).one()
+        sport = session.query(Sport).filter_by(name=categoryname).one()
     except NoResultFound:
         flash("You were looking for a sport that doesn't exist!")
+        return redirect(url_for('showSports'))
+    try:
+        itemToEdit = session.query(SportItem).filter_by(
+            name=itemname, sport_id=sport.id).one()
+    except NoResultFound:
+        flash("You were looking for an item that doesn't exist!")
         return redirect(url_for('showSports'))
     if itemToEdit.user_id != login_session['user_id']:
         flash("You can only edit items which you have created!")
@@ -376,23 +382,24 @@ def editSportItem(sport_id, item_id):
 
 
 # Delete a sport item
-@app.route('/sports/<int:sport_id>/items/<int:item_id>/delete/',
+@app.route('/sports/<categoryname>/items/<itemname>/delete/',
            methods=['GET', 'POST'])
-def deleteSportItem(sport_id, item_id):
+def deleteSportItem(categoryname, itemname):
     if 'username' not in login_session:
         flash("You must be logged in to delete items!")
         return redirect(url_for('showSports'))
     logged_in = True
     session = DBSession()
     try:
-        itemToDelete = session.query(SportItem).filter_by(id=item_id).one()
-    except NoResultFound:
-        flash("You were looking for an item that doesn't exist!")
-        return redirect(url_for('showSports'))
-    try:
-        sport = session.query(Sport).filter_by(id=sport_id).one()
+        sport = session.query(Sport).filter_by(name=categoryname).one()
     except NoResultFound:
         flash("You were looking for a sport that doesn't exist!")
+        return redirect(url_for('showSports'))
+    try:
+        itemToDelete = session.query(SportItem).filter_by(
+            name=itemname, sport_id=sport.id).one()
+    except NoResultFound:
+        flash("You were looking for an item that doesn't exist!")
         return redirect(url_for('showSports'))
     if itemToDelete.user_id != login_session['user_id']:
         flash("You can only delete items which you have created!")
@@ -416,20 +423,20 @@ def showSportsJSON():
 
 
 # JSON endpoint for all items in a category
-@app.route('/sports/<int:sport_id>/JSON/')
-def showSingleSportJSON(sport_id):
+@app.route('/sports/<categoryname>/JSON/')
+def showSingleSportJSON(categoryname):
     session = DBSession()
-    sport = session.query(Sport).filter_by(id=sport_id).one()
+    sport = session.query(Sport).filter_by(name=categoryname).one()
     items = session.query(SportItem).filter_by(sport_id=sport_id).all()
     return jsonify(
         category=sport.serialize, items=[i.serialize for i in items])
 
 
 # JSON endpoint for a single item
-@app.route('/sports/<int:sport_id>/items/<int:item_id>/JSON/')
-def showSportItemJSON(sport_id, item_id):
+@app.route('/sports/<categoryname>/items/<itemname>/JSON/')
+def showSportItemJSON(categoryname, itemname):
     session = DBSession()
-    item = session.query(SportItem).filter_by(id=item_id).one()
+    item = session.query(SportItem).filter_by(name=itemname).one()
     return jsonify(item.serialize)
 
 

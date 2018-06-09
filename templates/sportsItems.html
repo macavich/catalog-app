@@ -12,7 +12,7 @@
 			{% for item in items %}
 			<li>
 				<a class="sport__item__link"
-					 href="{{ url_for('showSportItem',sport_id=item.sport_id,item_id=item.id)}}">
+					 href="{{ url_for('showSportItem',categoryname=sport.name,itemname=item.name)}}">
 				 {{ item.name }}
 				</a>
 			</li>
