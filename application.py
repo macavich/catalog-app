@@ -250,10 +250,6 @@ def showSports():
     sports = session.query(Sport).order_by(asc(Sport.name)).all()
     dSports = {}
     items = session.query(SportItem).order_by(desc(SportItem.id)).all()
-    item2 = session.query(SportItem).filter_by(name='Rink').one()
-    print(item2.serialize)
-    # user = session.query(User).filter_by(id=item2.user_id).one()
-    # print(user.serialize)
     # handle only showing 10 items on the main page
     itemsToShow = []
     for index, item in enumerate(items):

@@ -2,7 +2,7 @@
 {% block content %}
 {% include "header.html" %}
 <main>
-  <h1 class="item__title"> Delete the following Sport item? </h1>
+  <h1 class="item__title"> Are sure you want to delete the following Sport item? </h1>
   <form action="{{ url_for('deleteSportItem', categoryname=sport.name, itemname=item.name) }}"
         method='post'>
     <h3>Name: {{ item.name }} </h3>
